@@ -1,0 +1,21 @@
+#!/usr/bin/env escript
+
+main([File]) -> {ok,Bin} = file:read_file(File), X = code(Bin), io:format("~p~n",[X]), halt(0);
+main(_)      -> io:format("usage: a64 <file>\n"), halt(1).
+
+atom("#"++X) -> list_to_integer(X);
+atom(X)      -> list_to_atom(X).
+
+last(X,Y,A)  ->
+  case lists:reverse(X) of
+      "]"++Z -> [lists:reverse([atom(lists:reverse(Z))|Y])|A];
+           _ -> {[atom(X)|Y],A} end.
+
+code(Bin) ->
+  [ list_to_tuple(
+    lists:reverse(
+    lists:foldl(
+      fun([$[|X],A) -> last(X,[],A);
+         (X,{Y,A}) -> last(X,Y,A);
+         (X,A) -> [atom(X)|A] end,[],string:tokens(C," ,"))))
+   || C <- string:tokens(binary_to_list(Bin),"\n") ].
