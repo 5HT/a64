@@ -1,0 +1,6 @@
+{application, a64,
+ [{description, "A64 ARM64 Assembler"},
+  {vsn, "0.6.4"},
+  {registered, []},
+  {applications, [kernel,stdlib]},
+  {env, []}]}.
