@@ -17,8 +17,12 @@
 -define(imm9(X),  is_integer(X) andalso X < 512).
 -define(imm10(X), is_integer(X) andalso X < 1024).
 -define(imm12(X), is_integer(X) andalso X < 4096).
+-define(imm13(X), is_integer(X) andalso X < 8192).
 -define(imm16(X), is_integer(X) andalso X < 65536).
 -define(imm21(X), is_integer(X) andalso X < 2097152).
--define(sh(X), (X==lsl orelse X == lsr orelse asr)).
+-define(sh3(X), (X==lsl orelse X == lsr orelse X == asr)).
+-define(sh4(X), (X==lsl orelse X == lsr orelse X == asr orelse X == ror)).
+-define(extend(X), (X == uxtb orelse X == uxth orelse X == uxtw orelse X == uxtx orelse
+                    X == sxtb orelse X == sxth orelse X == sxtw orelse X == sxtx)).
 
 -endif.
