@@ -1,5 +1,6 @@
 -module(a64).
--copyright('Maxim Sokhatsky').
+-copyright('ARM64 Assembler (c) SYNRC').
+-author('Maxim Sokhatsky').
 -include("asm.hrl").
 -compile(export_all).
 
@@ -35,7 +36,7 @@ reg(sp)  -> <<31:5>>;
 reg(wsp) -> <<31:5>>;
 reg(X)   -> <<(list_to_integer(tl(atom_to_list(X)))):5>>.
 
-% C6.2.289
+% C6.2.289 (add/sub have same opcode)
 
 sub(R1,R2,Im) when ?x(R1), ?x(R2), ?imm(Im) ->
    Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
@@ -55,7 +56,7 @@ add(R1,R2,Im) when ?w(R1), ?w(R2), ?imm(Im) ->
    Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
    <<0:1,0:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>.
  
-% C6.2.256
+% C6.2.256 (three addressing modes)
 
 stp(R1,R2,[R3],Im) when ?w(R1), ?w(R2), ?x(R3), ?imm(Im) ->
    Dst = reg(R1), Src = reg(R2), Rn = reg(R3), I = <<(Im div 4):7>>,
