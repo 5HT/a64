@@ -11,6 +11,14 @@
                C==w16 orelse C==w17 orelse C==w18 orelse C==w19 orelse C==w20 orelse C==w21 orelse C==w22 orelse C==w23 orelse
                C==w24 orelse C==w25 orelse C==w26 orelse C==w27 orelse C==w28 orelse C==w29 orelse C==w30 orelse C==wsp)).
 
--define(imm(X), is_integer(X)).
+-define(imm(X),   is_integer(X)).
+-define(imm3(X),  is_integer(X) andalso X < 8).
+-define(imm6(X),  is_integer(X) andalso X < 64).
+-define(imm9(X),  is_integer(X) andalso X < 512).
+-define(imm10(X), is_integer(X) andalso X < 1024).
+-define(imm12(X), is_integer(X) andalso X < 4096).
+-define(imm16(X), is_integer(X) andalso X < 65536).
+-define(imm21(X), is_integer(X) andalso X < 2097152).
+-define(sh(X), (X==lsl orelse X == lsr orelse asr)).
 
 -endif.

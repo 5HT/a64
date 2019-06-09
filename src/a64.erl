@@ -4,7 +4,7 @@
 -include("asm.hrl").
 -compile(export_all).
 
-main([F])    -> {ok,I} = file:read_file(F), {C,O} = compile(code(I)),
+main([F])    -> {ok,I} = file:read_file(F), {C,O} = compile(code(I)), io:format("~p~n",[code(I)]),
                 file:write_file(base(F),O,[raw,write,binary,create]), halt(C);
 main(_)      -> io:format("usage: a64 <file>\n"), halt(1).
 base(X)      -> filename:basename(X,filename:extension(X)).
@@ -30,84 +30,146 @@ success_(M,F,A) -> erlang:apply(M,F,A).
 compile(Code) ->
    {0,iolist_to_binary([ success(?MODULE,hd(Instr),tl(Instr)) || Instr <- Code])}.
 
-reg(sp)  -> <<31:5>>;
-reg(wsp) -> <<31:5>>;
-reg(X)   -> <<(list_to_integer(tl(atom_to_list(X)))):5>>.
+reg(sp)    -> <<31:5>>;
+reg(wsp)   -> <<31:5>>;
+reg(X)     -> <<(list_to_integer(tl(atom_to_list(X)))):5>>.
+shift(lsl) -> <<0:2>>;
+shift(lsr) -> <<1:2>>;
+shift(asr) -> <<2:2>>.
+
+% C6.2.1 ADC
+
+adc(R1,R2,R3) when ?x(R1), ?x(R2), ?x(R3) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1),
+   <<1:1,0:2,13:4,0:4,Rm/bitstring,0:6,Rn/bitstring,Rd/bitstring>>;
+
+adc(R1,R2,R3) when ?w(R1), ?w(R2), ?w(R3) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1),
+   <<0:1,0:2,13:4,0:4,Rm/bitstring,0:6,Rn/bitstring,Rd/bitstring>>.
+
+% C6.2.2 ADCS
+
+adcs(R1,R2,R3) when ?x(R1), ?x(R2), ?x(R3) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1),
+   <<1:1,1:2,13:4,0:4,Rm/bitstring,0:6,Rn/bitstring,Rd/bitstring>>;
+
+adcs(R1,R2,R3) when ?w(R1), ?w(R2), ?w(R3) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1),
+   <<0:1,1:2,13:4,0:4,Rm/bitstring,0:6,Rn/bitstring,Rd/bitstring>>.
+
+% C6.2.3 ADD (extended register)
+
+add(R1,R2,R3) when ?x(R1), ?x(R2), ?x(R3) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<0:3>>,
+   <<1:1,0:1,0:1,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+
+add(R1,R2,[R3,Im]) when ?x(R1), ?x(R2), ?x(R3), ?imm3(Im) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:3>>,
+   <<1:1,0:1,0:1,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+
+add(R1,R2,R3) when ?x(R1), ?x(R2), ?w(R3) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<0:3>>,
+   <<1:1,0:1,0:1,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+
+add(R1,R2,[R3,Im]) when ?x(R1), ?x(R2), ?w(R3), ?imm3(Im)  ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:3>>,
+   <<1:1,0:1,0:1,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+
+add(R1,R2,R3) when ?w(R1), ?w(R2), ?w(R3) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<0:3>>,
+   <<0:1,0:1,0:1,11:5,1:3,Rm/bitstring,6:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+
+add(R1,R2,[R3,Im]) when ?w(R1), ?w(R2), ?w(R3), ?imm3(Im) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:3>>,
+   <<0:1,0:1,0:1,11:5,1:3,Rm/bitstring,6:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+
+% C6.2.4 ADD (immediate)
+
+add(R1,R2,Im) when ?x(R1), ?x(R2), ?imm12(Im) ->
+   Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
+   <<1:1,0:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>;
+
+add(R1,R2,Im) when ?w(R1), ?w(R2), ?imm12(Im) ->
+   Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
+   <<0:1,0:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>.
+
+% C6.2.5 ADD (shifted register)
+
+add(R1,R2,R3,[Sh,Im]) when ?x(R1), ?x(R2), ?x(R3), ?imm6(Im), ?sh(Sh) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:6>>, S = shift(Sh),
+   <<1:1,0:1,0:1,11:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+
+add(R1,R2,R3,[Sh,Im]) when ?w(R1), ?w(R2), ?w(R3), ?imm6(Im), ?sh(Sh) ->
+   Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:6>>, S = shift(Sh),
+   <<0:1,0:1,0:1,11:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
+
+% C6.2.6 ADDS (extended register)
+
 
 % C6.2.281 STUR
 
-stur(R1,[R2,Im]) when ?x(R1), ?x(R2), ?imm(Im) ->
+stur(R1,[R2,Im]) when ?x(R1), ?x(R2), ?imm9(Im) ->
    Rt = reg(R1), Rn = reg(R2), I = <<Im:9>>,
    <<3:2,7:3,0:6,I/bitstring,0:2,Rn/bitstring,Rt/bitstring>>;
 
-stur(R1,[R2,Im]) when ?w(R1), ?x(R2), ?imm(Im) ->
+stur(R1,[R2,Im]) when ?w(R1), ?x(R2), ?imm9(Im) ->
    Rt = reg(R1), Rn = reg(R2), I = <<Im:9>>,
    <<2:2,7:3,0:6,I/bitstring,0:2,Rn/bitstring,Rt/bitstring>>.
 
 % C6.2.175 MOV (wide immediate)
 
-mov(R1,Im) when ?x(R1), ?imm(Im) ->
+mov(R1,Im) when ?x(R1), ?imm16(Im) ->
    R = reg(R1), I = <<Im:16>>,
    <<1:1,2:2,37:6,0:2,I/bitstring,R/bitstring>>;
 
-mov(R1,Im) when ?w(R1), ?imm(Im) ->
+mov(R1,Im) when ?w(R1), ?imm16(Im) ->
    R = reg(R1), I = <<Im:16>>,
    <<0:1,2:2,37:6,0:2,I/bitstring,R/bitstring>>.
 
 % C6.2.10 ADRP
 
-adrp(R1,Im) when ?x(R1), ?imm(Im) ->
+adrp(R1,Im) when ?x(R1), ?imm21(Im) ->
    Dst = reg(R1), I = <<(Im bsr 2):19>>, J = <<Im:2>>,
    <<1:1,J:2/bitstring,16:5,I:19/bitstring,Dst:5/bitstring>>.
 
 % C6.2.289 SUB (immediate)
 
-sub(R1,R2,Im) when ?x(R1), ?x(R2), ?imm(Im) ->
+sub(R1,R2,Im) when ?x(R1), ?x(R2), ?imm12(Im) ->
    Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
    <<1:1,1:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>;
 
-sub(R1,R2,Im) when ?w(R1), ?w(R2), ?imm(Im) ->
+sub(R1,R2,Im) when ?w(R1), ?w(R2), ?imm12(Im) ->
    Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
    <<0:1,1:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>.
-
-% C6.2.4 ADD (immediate)
-
-add(R1,R2,Im) when ?x(R1), ?x(R2), ?imm(Im) ->
-   Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
-   <<1:1,0:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>;
-
-add(R1,R2,Im) when ?w(R1), ?w(R2), ?imm(Im) ->
-   Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
-   <<0:1,0:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>.
 
 % C6.2.256 STP
 
 % Post-index
 
-stp(R1,R2,[R3],Im) when ?w(R1), ?w(R2), ?x(R3), ?imm(Im) ->
+stp(R1,R2,[R3],Im) when ?w(R1), ?w(R2), ?x(R3), ?imm9(Im) ->
    Dst = reg(R1), Src = reg(R2), Rn = reg(R3), I = <<(Im div 4):7>>,
    <<1:2,5:3,0:1,1:3,0:1,I/bitstring,Src/bitstring,Rn/bitstring,Dst/bitstring>>;
 
-stp(R1,R2,[R3],Im) when ?x(R1), ?x(R2), ?x(R3), ?imm(Im) ->
+stp(R1,R2,[R3],Im) when ?x(R1), ?x(R2), ?x(R3), ?imm10(Im) ->
    Dst = reg(R1), Src = reg(R2), Rn = reg(R3), I = <<(Im div 8):7>>,
    <<2:2,5:3,0:1,1:3,0:1,I/bitstring,Src/bitstring,Rn/bitstring,Dst/bitstring>>.
 
 % Signed offset
 
-stp(R1,R2,[R3,Im]) when ?w(R1), ?w(R2), ?x(R3), ?imm(Im) ->
+stp(R1,R2,[R3,Im]) when ?w(R1), ?w(R2), ?x(R3), ?imm9(Im) ->
    Dst = reg(R1), Src = reg(R2), Rn = reg(R3), I = <<(Im div 4):7>>,
    <<1:2,5:3,0:1,2:3,0:1,I/bitstring,Src/bitstring,Rn/bitstring,Dst/bitstring>>;
 
-stp(R1,R2,[R3,Im]) when ?x(R1), ?x(R2), ?x(R3), ?imm(Im) ->
+stp(R1,R2,[R3,Im]) when ?x(R1), ?x(R2), ?x(R3), ?imm10(Im) ->
    Dst = reg(R1), Src = reg(R2), Rn = reg(R3), I = <<(Im div 8):7>>,
    <<2:2,5:3,0:1,2:3,0:1,I/bitstring,Src/bitstring,Rn/bitstring,Dst/bitstring>>;
 
 % Pre-index
 
-stp(R1,R2,[R3,Im,$!]) when ?w(R1), ?w(R2), ?x(R3), ?imm(Im) ->
+stp(R1,R2,[R3,Im,$!]) when ?w(R1), ?w(R2), ?x(R3), ?imm9(Im) ->
    Dst = reg(R1), Src = reg(R2), Rn = reg(R3), I = <<(Im div 4):7>>,
    <<1:2,5:3,0:1,3:3,0:1,I/bitstring,Src/bitstring,Rn/bitstring,Dst/bitstring>>;
 
-stp(R1,R2,[R3,Im,$!]) when ?x(R1), ?x(R2), ?x(R3), ?imm(Im) ->
+stp(R1,R2,[R3,Im,$!]) when ?x(R1), ?x(R2), ?x(R3), ?imm10(Im) ->
    Dst = reg(R1), Src = reg(R2), Rn = reg(R3), I = <<(Im div 8):7>>,
    <<2:2,5:3,0:1,3:3,0:1,I/bitstring,Src/bitstring,Rn/bitstring,Dst/bitstring>>.
