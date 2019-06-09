@@ -4,7 +4,7 @@
 -include("asm.hrl").
 -compile(export_all).
 
-main([F])    -> {ok,I} = file:read_file(F), {C,O} = compile(code(I)), io:format("~p~n",[code(I)]),
+main([F])    -> {ok,I} = file:read_file(F), {C,O} = compile(code(I)), %io:format("~p~n",[code(I)]),
                 file:write_file(base(F),O,[raw,write,binary,create]), halt(C);
 main(_)      -> io:format("usage: a64 <file>\n"), halt(1).
 base(X)      -> filename:basename(X,filename:extension(X)).
@@ -38,7 +38,8 @@ reg(X)     -> <<(list_to_integer(tl(atom_to_list(X)))):5>>.
 
 shift(lsl) -> <<0:2>>;
 shift(lsr) -> <<1:2>>;
-shift(asr) -> <<2:2>>.
+shift(asr) -> <<2:2>>;
+shift(ror) -> <<3:2>>.
 
 extend(uxtb) -> <<0:3>>;
 extend(uxth) -> <<1:3>>;
@@ -181,13 +182,13 @@ adrp(R1,Im) when ?x(R1), ?imm21(Im) ->
    Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<0:6>>, Sh = <<0:2>>,
    <<0:1,0:2,10:5,Sh/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
 
-'and'(R1,R2,R3,Sh,Im) when ?x(R1), ?x(R2), ?sh4(Sh), ?imm6(Im) ->
-   Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<Im:6>>, Sh = <<0:2>>,
-   <<1:1,0:2,10:5,Sh/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+'and'(R1,R2,R3,Sh,Im) when ?x(R1), ?x(R2), ?x(R3), ?sh4(Sh), ?imm6(Im) ->
+   Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<Im:6>>, S = shift(Sh),
+   <<1:1,0:2,10:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
-'and'(R1,R2,R3,Sh,Im) when ?w(R1), ?w(R2), ?sh4(Sh), ?imm6(Im) ->
-   Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<Im:6>>, Sh = <<0:2>>,
-   <<0:1,0:2,10:5,Sh/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
+'and'(R1,R2,R3,Sh,Im) when ?w(R1), ?w(R2), ?w(R3), ?sh4(Sh), ?imm6(Im) ->
+   Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<Im:6>>, S = shift(Sh),
+   <<0:1,0:2,10:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
 
 % C6.2.13 ANDS (immediate)
 
@@ -210,12 +211,12 @@ ands(R1,R2,R3) when ?w(R1), ?w(R2), ?w(R3) ->
    <<0:1,3:2,10:5,Sh/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
 
 ands(R1,R2,R3,Sh,Im) when ?x(R1), ?x(R2), ?sh4(Sh), ?imm6(Im) ->
-   Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<Im:6>>, Sh = shift(Sh),
-   <<1:1,3:2,10:5,Sh/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+   Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<Im:6>>, S = shift(Sh),
+   <<1:1,3:2,10:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
 ands(R1,R2,R3,Sh,Im) when ?w(R1), ?w(R2), ?sh4(Sh), ?imm6(Im) ->
-   Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<Im:6>>, Sh = shift(Sh),
-   <<0:1,3:2,10:5,Sh/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
+   Rm = reg(R3), Rd = reg(R1), Rn = reg(R2), I = <<Im:6>>, S = shift(Sh),
+   <<0:1,3:2,10:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
 
 % C6.2.15, C6.2.17 ASR (register)
 
@@ -228,6 +229,8 @@ asr(R1,R2,R3) when ?w(R1), ?w(R2), ?w(R3) ->
    <<0:1,0:2,13:4,6:4,Rm/bitstring,2:4,2:2,Rn/bitstring,Rd/bitstring>>.
 
 % C6.2.18 AT
+
+
 
 % C6.2.175 MOV (wide immediate)
 

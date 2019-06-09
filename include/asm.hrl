@@ -12,14 +12,14 @@
                C==w24 orelse C==w25 orelse C==w26 orelse C==w27 orelse C==w28 orelse C==w29 orelse C==w30 orelse C==wsp)).
 
 -define(imm(X),   is_integer(X)).
--define(imm3(X),  is_integer(X) andalso X < 8).
--define(imm6(X),  is_integer(X) andalso X < 64).
--define(imm9(X),  is_integer(X) andalso X < 512).
--define(imm10(X), is_integer(X) andalso X < 1024).
--define(imm12(X), is_integer(X) andalso X < 4096).
--define(imm13(X), is_integer(X) andalso X < 8192).
--define(imm16(X), is_integer(X) andalso X < 65536).
--define(imm21(X), is_integer(X) andalso X < 2097152).
+-define(imm3(X),  (is_integer(X) andalso X < 8)).
+-define(imm6(X),  (is_integer(X) andalso X < 64)).
+-define(imm9(X),  (is_integer(X) andalso X < 512)).
+-define(imm10(X), (is_integer(X) andalso X < 1024)).
+-define(imm12(X), (is_integer(X) andalso X < 4096)).
+-define(imm13(X), (is_integer(X) andalso X < 8192)).
+-define(imm16(X), (is_integer(X) andalso X < 65536)).
+-define(imm21(X), (is_integer(X) andalso X < 2097152)).
 -define(sh3(X), (X==lsl orelse X == lsr orelse X == asr)).
 -define(sh4(X), (X==lsl orelse X == lsr orelse X == asr orelse X == ror)).
 -define(extend(X), (X == uxtb orelse X == uxth orelse X == uxtw orelse X == uxtx orelse
