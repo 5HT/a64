@@ -12,6 +12,9 @@
                C==w24 orelse C==w25 orelse C==w26 orelse C==w27 orelse C==w28 orelse C==w29 orelse C==w30 orelse C==wsp)).
 
 -define(imm(X),   is_integer(X)).
+-define(op(X), (X == s1e1r orelse X == s1e1w orelse X == s1e0r orelse X == s1e0w orelse X == s1e2r
+         orelse X == s1e2w orelse X == s12e1r orelse X == s12e1w orelse X == s12e0r orelse X == s12e0w
+         orelse X == s1e3r orelse X == s1e3w orelse X == s1e1rp orelse X == s1e1wp)).
 -define(imm3(X),  (is_integer(X) andalso X < 8)).
 -define(imm6(X),  (is_integer(X) andalso X < 64)).
 -define(imm9(X),  (is_integer(X) andalso X < 512)).
