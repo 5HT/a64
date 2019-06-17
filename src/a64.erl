@@ -89,47 +89,47 @@ adcs(R1,R2,R3) when ?w(R1), ?w(R2), ?w(R3) ->
 
 add(R1,R2,R3) when ?x(R1), ?x(R2), ?x(R3) ->
    Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<0:3>>,
-   <<1:1,0:1,0:1,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+   <<1:1,0:2,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
 add(R1,R2,[R3,Im]) when ?x(R1), ?x(R2), ?x(R3), ?imm3(Im) ->
    Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:3>>,
-   <<1:1,0:1,0:1,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+   <<1:1,0:2,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
 add(R1,R2,R3) when ?x(R1), ?x(R2), ?w(R3) ->
    Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<0:3>>,
-   <<1:1,0:1,0:1,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+   <<1:1,0:2,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
 add(R1,R2,[R3,Im]) when ?x(R1), ?x(R2), ?w(R3), ?imm3(Im)  ->
    Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:3>>,
-   <<1:1,0:1,0:1,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+   <<1:1,0:2,11:5,1:3,Rm/bitstring,3:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
 add(R1,R2,R3) when ?w(R1), ?w(R2), ?w(R3) ->
    Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<0:3>>,
-   <<0:1,0:1,0:1,11:5,1:3,Rm/bitstring,6:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+   <<0:1,0:2,11:5,1:3,Rm/bitstring,6:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
 add(R1,R2,[R3,Im]) when ?w(R1), ?w(R2), ?w(R3), ?imm3(Im) ->
    Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:3>>,
-   <<0:1,0:1,0:1,11:5,1:3,Rm/bitstring,6:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+   <<0:1,0:2,11:5,1:3,Rm/bitstring,6:3,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
 % C6.2.4 ADD (immediate) % C6.2.173 MOV (to/from SP)
 
 add(R1,R2,Im) when ?x(R1), ?x(R2), ?imm12(Im) ->
    Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
-   <<1:1,0:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>;
+   <<1:1,0:2,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>;
 
 add(R1,R2,Im) when ?w(R1), ?w(R2), ?imm12(Im) ->
    Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
-   <<0:1,0:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>.
+   <<0:1,0:2,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>.
 
 % C6.2.5 ADD (shifted register)
 
 add(R1,R2,R3,Sh,Im) when ?x(R1), ?x(R2), ?x(R3), ?imm6(Im), ?sh3(Sh) ->
    Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:6>>, S = shift(Sh),
-   <<1:1,0:1,0:1,11:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>;
+   <<1:1,0:2,11:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>;
 
 add(R1,R2,R3,Sh,Im) when ?w(R1), ?w(R2), ?w(R3), ?imm6(Im), ?sh3(Sh) ->
    Rm = reg(R3), Rn = reg(R2), Rd = reg(R1), I = <<Im:6>>, S = shift(Sh),
-   <<0:1,0:1,0:1,11:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
+   <<0:1,0:2,11:5,S/bitstring,0:1,Rm/bitstring,I/bitstring,Rn/bitstring,Rd/bitstring>>.
 
 % C6.2.6 ADDS (extended register) % C6.2.53 CMN (extended register)
 
@@ -749,11 +749,11 @@ stur(R1,[R2,Im]) when ?w(R1), ?x(R2), ?imm9(Im) ->
 
 sub(R1,R2,Im) when ?x(R1), ?x(R2), ?imm12(Im) ->
    Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
-   <<1:1,1:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>;
+   <<1:1,2:2,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>;
 
 sub(R1,R2,Im) when ?w(R1), ?w(R2), ?imm12(Im) ->
    Dst = reg(R1), Src = reg(R2), I = <<Im:12>>,
-   <<0:1,1:1,0:1,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>.
+   <<0:1,2:2,34:6,0:1,I/bitstring,Src/bitstring,Dst/bitstring>>.
 
 % C6.2.290 SUB (shifted register) % C6.2.187 NEG (shifted register)
 
