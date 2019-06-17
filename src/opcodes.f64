@@ -1,0 +1,19 @@
+0 x 0 s 1 1 1 0 s s 1 ... 0 | 1 0 1 1 1 0 % C7.2.001 ABS
+0 x 0 s 1 1 1 0 s s 1 ... _ | 1 0 0 0 0 1 % C7.2 002 ADD (vector)
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 1 0 0 0 0 % C7.2.003 ADDHN, ADDHN2
+0 1 0 1 1 1 1 0 s s 1 ... 1 | 1 0 1 1 1 0 % C7.2.004 ADDP (scalar)
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 0 1 1 1 1 % C7.2.005 ADDP (vector)
+0 x 0 0 1 1 1 0 s s 1 ... 1 | 1 0 1 1 1 0 % C7.2.006 ADDV
+0 1 0 0 1 1 1 0 0 0 1 ... 0 | 0 1 0 1 1 0 % C7.2.007 AESD - AES single round decryption.
+0 1 0 0 1 1 1 0 0 0 1 ... 0 | 0 1 0 0 1 0 % C7.2.008 AESE - AES single round encryption.
+0 1 0 0 1 1 1 0 0 0 1 ... 0 | 0 1 1 1 1 0 % C7.2.009 AESIMC - AES inverse mix columns.
+0 1 0 0 1 1 1 0 0 0 1 ... 0 | 0 1 1 0 1 0 % C7.2.010 AESMC - AES mix columns.
+0 x 0 0 1 1 1 0 0 0 1 ... _ | 0 0 0 1 1 1 % C7.2.011 AND (vector)
+1 1 0 0 1 1 1 0 0 0 1 ... _ | 0 _ _ _ _ _ % C7.2.012 BCAX
+0 x 1 0 1 1 1 1 0 0 0 ... c | x x x 1 0 1 % C7.2.013 BIC (vector, immediate)
+0 x 0 0 1 1 1 0 0 1 1 ... _ | 0 0 0 1 1 1 % C7.2.014 BIC (vector, register)
+0 x 0 0 1 1 1 0 s s 0 ... _ | 0 1 0 1 1 0 % C7.2.379 UZP2 - Unzip vectors (secondary).
+1 1 0 0 1 1 1 0 1 0 0 ... _ | _ _ _ _ _ _ % C7.2.380 XAR - Exclusive OR and Rotate.
+0 x 0 0 1 1 1 0 s s 1 ... 1 | 0 0 1 0 1 0 % C7.2.381 XTN, XTN2 - Extract Narrow.
+0 x 0 0 1 1 1 0 s s 0 ... _ | 0 0 1 1 1 0 % C7.2.382 ZIP1 - Zip vectors (primary).
+0 x 0 0 1 1 1 0 s s 0 ... _ | 0 1 1 1 1 0 % C7.2.383 ZIP2 - Zip vectors (secondary).
