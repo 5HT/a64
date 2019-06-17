@@ -12,6 +12,32 @@
 1 1 0 0 1 1 1 0 0 0 1 ... _ | 0 _ _ _ _ _ % C7.2.012 BCAX
 0 x 1 0 1 1 1 1 0 0 0 ... c | x x x 1 0 1 % C7.2.013 BIC (vector, immediate)
 0 x 0 0 1 1 1 0 0 1 1 ... _ | 0 0 0 1 1 1 % C7.2.014 BIC (vector, register)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 1 0 0 0 % C7.2.352 UMLSL, UMLSL2 (vector) - Unsigned Multiply-Subtract Long (vector).
+0 x 0 0 1 1 1 0 0 0 0 ... _ | 0 0 1 1 1 1 % C7.2.353 UMOV - Unsigned Move vector element to general-purpose register.
+0 x 1 0 1 1 1 1 s s i ... _ | 1 0 1 0 h 0 % C7.2.354 UMULL, UMULL2 (by element) - Unsigned Multiply Long (vector, by element).
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 1 0 0 0 0 % C7.2.355 UMULL, UMULL2 (vector) - Unsigned Multiply long (vector).
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 0 0 1 1 % C7.2.356 UQADD - Unsigned saturating Add.
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 0 1 1 1 % C7.2.357 UQRSHL - Unsigned saturating Rounding Shift Left (register). 
+0 x 1 0 1 1 1 1 0 _ _ ... _ | 1 0 0 1 1 1 % C7.2.358 UQRSHRN, UQRSHRN2 - Unsigned saturating Rounded Shift Right Narrow (immediate).
+0 x 1 i 1 1 1 1 0 _ _ ... _ | 0 1 1 1 0 1 % C7.2.359 UQSHL (immediate) - Unsigned saturating Shift Left (immediate).
+0 x 1 i 1 1 1 0 s s 1 ... _ | 0 1 0 0 1 1 % C7.2.360 UQSHL (register) - Unsigned saturating Shift Left (register).
+0 x 1 0 1 1 1 1 0 _ _ ... _ | 1 0 0 1 0 1 % C7.2.361 UQSHRN, UQSHRN2 - Unsigned saturating Shift Right Narrow (immediate).
+0 x 1 i 1 1 1 0 s s 1 ... _ | 0 0 1 0 1 1 % C7.2.362 UQSUB - Unsigned saturating Subtract.
+0 x 1 i 1 1 1 0 s s 1 ... 1 | 0 1 0 0 1 0 % C7.2.363 UQXTN, UQXTN2 - Unsigned saturating extract Narrow.
+0 x 0 0 1 1 1 0 1 s 1 ... 1 | 1 1 0 0 1 0 % C7.2.364 URECPE - Unsigned Reciprocal Estimate.
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 0 1 0 1 % C7.2.365 URHADD Unsigned Rounding Halving Add.
+0 x 1 i 1 1 1 0 s s 1 ... _ | 0 1 0 1 0 1 % C7.2.366 URSHL - Unsigned Rounding Shift Left (register).
+0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 1 0 0 1 % C7.2.367 URSHR - Unsigned Rounding Shift Right (immediate).
+0 x 1 0 1 1 1 0 1 s 1 ... 1 | 1 1 0 0 1 0 % C7.2.368 URSQRTE - Unsigned Reciprocal Square Root Estimate.
+0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 1 1 0 1 % C7.2.369 URSRA - Unsigned Rounding Shift Right and Accumulate (immediate).
+0 1 1 1 1 1 1 0 s s 1 ... _ | 0 1 0 0 0 1 % C7.2.370 USHL - Unsigned Shift Left (register).
+0 x 1 0 1 1 1 1 0 _ _ ... 0 | 1 0 1 0 0 1 % C7.2.371 USHLL, USHLL2 % C7.2.377 UXTL, UXTL2 - Unsigned extend Long.
+0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 0 0 0 1 % C7.2.372 USHR - Unsigned Shift Right (immediate).
+0 x 1 s 1 1 1 0 s s 1 ... 0 | 0 0 0 1 1 1 % C7.2.373 USQADD - Unsigned saturating Accumulate of Signed value.
+0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 0 1 0 1 % C7.2.374 USRA - Unsigned Shift Right and Accumulate (immediate).
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 1 0 0 0 % C7.2.375 USUBL, USUBL2 - Unsigned Subtract Long.
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 1 1 0 0 % C7.2.376 USUBW, USUBW2 - Unsigned Subtract Wide.
+0 x 0 0 1 1 1 0 s s 0 ... _ | 0 0 0 1 1 0 % C7.2.378 UZP1 - Unzip vectors (primary).
 0 x 0 0 1 1 1 0 s s 0 ... _ | 0 1 0 1 1 0 % C7.2.379 UZP2 - Unzip vectors (secondary).
 1 1 0 0 1 1 1 0 1 0 0 ... _ | _ _ _ _ _ _ % C7.2.380 XAR - Exclusive OR and Rotate.
 0 x 0 0 1 1 1 0 s s 1 ... 1 | 0 0 1 0 1 0 % C7.2.381 XTN, XTN2 - Extract Narrow.
