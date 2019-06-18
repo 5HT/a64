@@ -12,16 +12,237 @@
 1 1 0 0 1 1 1 0 0 0 1 ... _ | 0 _ _ _ _ _ % C7.2.012 BCAX
 0 x 1 0 1 1 1 1 0 0 0 ... c | x x x 1 0 1 % C7.2.013 BIC (vector, immediate)
 0 x 0 0 1 1 1 0 0 1 1 ... _ | 0 0 0 1 1 1 % C7.2.014 BIC (vector, register)
-0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 1 0 0 0 % C7.2.352 UMLSL, UMLSL2 (vector) - Unsigned Multiply-Subtract Long (vector).
-0 x 0 0 1 1 1 0 0 0 0 ... _ | 0 0 1 1 1 1 % C7.2.353 UMOV - Unsigned Move vector element to general-purpose register.
-0 x 1 0 1 1 1 1 s s i ... _ | 1 0 1 0 h 0 % C7.2.354 UMULL, UMULL2 (by element) - Unsigned Multiply Long (vector, by element).
-0 x 1 0 1 1 1 0 s s 1 ... _ | 1 1 0 0 0 0 % C7.2.355 UMULL, UMULL2 (vector) - Unsigned Multiply long (vector).
-0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 0 0 1 1 % C7.2.356 UQADD - Unsigned saturating Add.
-0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 0 1 1 1 % C7.2.357 UQRSHL - Unsigned saturating Rounding Shift Left (register). 
-0 x 1 0 1 1 1 1 0 _ _ ... _ | 1 0 0 1 1 1 % C7.2.358 UQRSHRN, UQRSHRN2 - Unsigned saturating Rounded Shift Right Narrow (immediate).
-0 x 1 i 1 1 1 1 0 _ _ ... _ | 0 1 1 1 0 1 % C7.2.359 UQSHL (immediate) - Unsigned saturating Shift Left (immediate).
-0 x 1 i 1 1 1 0 s s 1 ... _ | 0 1 0 0 1 1 % C7.2.360 UQSHL (register) - Unsigned saturating Shift Left (register).
-0 x 1 0 1 1 1 1 0 _ _ ... _ | 1 0 0 1 0 1 % C7.2.361 UQSHRN, UQSHRN2 - Unsigned saturating Shift Right Narrow (immediate).
+0 x s 0 1 1 1 1 1 0 i ... _ | 1 1 0 0 h 0 % C7.2.120 FMLSL, FMLSL2 (by element)
+0 x s 0 1 1 1 0 1 0 1 ... _ | 1 1 0 0 1 1 % C7.2.121 FMLSL, FMLSL2 (vector)
+0 x x 0 1 1 1 1 0 0 0 ... _ | 1 1 1 1 0 1 % C7.2.122 FMOV (vector, immediate)
+0 0 0 1 1 1 1 0 x x 1 ... 0 | 0 1 0 0 0 0 % C7.2.123 FMOV (register)
+x 0 0 1 1 1 1 0 x x 1 ... _ | 0 0 0 0 0 0 % C7.2.124 FMOV (general)
+0 0 0 1 1 1 1 0 x x 1 ... _ | _ _ _ 1 0 0 % C7.2.125 FMOV (scalar, immediate)
+0 0 0 1 1 1 1 1 x x 1 ... _ | 1 _ _ _ _ _ % C7.2.126 FMSUB
+0 x 1 0 1 1 1 0 1 x 1 ... 0 | 1 1 1 1 1 0 % C7.2.132 FNEG (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 1 | 0 1 0 0 0 0 % C7.2.133 FNEG (scalar)
+0 0 0 1 1 1 1 1 s s 1 ... _ | 0 _ _ _ _ _ % C7.2.134 FNMADD
+0 0 0 1 1 1 1 1 s s 1 ... _ | 1 _ _ _ _ _ % C7.2.135 FNMSUB
+0 0 0 1 1 1 1 0 s s 1 ... _ | 1 0 0 0 1 0 % C7.2.136 FNMUL (scalar)
+0 1 0 1 1 1 1 0 1 x 1 ... 1 | 1 1 0 1 1 0 % C7.2.137 FRECPE
+0 1 0 1 1 1 1 0 0 x 1 ... _ | p p 1 1 1 1 % C7.2.138 FRECPS
+0 1 0 1 1 1 1 0 1 x 1 ... 1 | 1 1 1 1 1 0 % C7.2.139 FRECPX
+0 x 1 0 1 1 1 0 0 x 1 ... 1 | 1 0 0 0 1 0 % C7.2.140 FRINTA (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 0 | 0 1 0 0 0 0 % C7.2.141 FRINTA (scalar)
+0 x 1 0 1 1 1 0 1 x 1 ... 1 | 1 0 0 1 1 0 % C7.2.142 FRINTI (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 1 | 1 1 0 0 0 0 % C7.2.143 FRINTI (scalar)
+0 x 0 0 1 1 1 0 0 x 1 ... 1 | 1 0 0 1 1 0 % C7.2.144 FRINTM (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 1 | 0 1 0 0 0 0 % C7.2.145 FRINTM (scalar)
+0 x 0 0 1 1 1 0 0 x 1 ... 1 | 1 0 0 0 1 0 % C7.2.146 FRINTN (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 0 | 0 1 0 0 0 0 % C7.2.147 FRINTN (scalar)
+0 x 0 0 1 1 1 0 1 x 1 ... 1 | 1 0 0 0 1 0 % C7.2.148 FRINTP (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 0 | 1 1 0 0 0 0 % C7.2.149 FRINTP (scalar)
+0 x 1 0 1 1 1 0 0 s 1 ... 1 | 1 0 0 1 1 0 % C7.2.150 FRINTX (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 1 | 0 1 0 0 0 0 % C7.2.151 FRINTX (scalar)
+0 x 0 0 1 1 1 0 0 1 x ... 1 | 1 0 0 1 1 0 % C7.2.152 FRINTZ (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 1 | 1 1 0 0 0 0 % C7.2.153 FRINTZ (scalar)
+0 1 1 1 1 1 1 0 1 x x ... 1 | 1 1 0 1 1 0 % C7.2.154 FRSQRTE
+0 1 0 1 1 1 1 0 1 x x ... _ | p p 1 1 1 1 % C7.2.155 FRSQRTS
+0 x 1 0 1 1 1 0 1 1 1 ... 1 | 1 1 1 1 1 0 % C7.2.156 FSQRT (vector)
+0 0 0 1 1 1 1 0 s s 1 ... 1 | 1 1 0 0 0 0 % C7.2.157 FSQRT (scalar)
+0 x 0 0 1 1 1 0 1 x 1 ... _ | p p 0 1 0 1 % C7.2.158 FSUB (vector)
+0 0 0 1 1 1 1 0 s s 1 ... _ | 0 0 1 1 1 0 % C7.2.159 FSUB (scalar)
+0 x 0 0 1 1 0 0 i 1 0 ... _ | x x 1 x s s % C7.2.162 LD1 (multiple structures)
+0 x 0 0 1 1 0 1 i 1 0 ... _ | 1 1 0 0 s s % C7.2.164 LD1R
+0 x 0 0 1 1 0 1 i 1 0 ... _ | x x 0 s s s % C7.2.163 LD1 (single structure)
+0 x 0 0 1 1 0 0 i 1 0 ... _ | 1 0 0 0 s s % C7.2.165 LD2 (multiple structures)
+0 x 0 0 1 1 0 1 i 1 1 ... _ | 1 1 0 0 s s % C7.2.167 LD2R
+0 x 0 0 1 1 0 1 i 1 1 ... _ | x x 0 s s s % C7.2.166 LD2 (single structure)
+0 x 0 0 1 1 0 0 i 1 0 ... _ | 0 1 0 0 s s % C7.2.168 LD3 (multiple structures)
+0 x 0 0 1 1 0 1 0 1 0 ... 0 | 1 1 1 0 s s % C7.2.170 LD3R
+0 x 0 0 1 1 0 1 i 1 0 ... _ | x x 1 s s s % C7.2.169 LD3 (single structure)
+0 x 0 0 1 1 0 0 0 1 0 ... 0 | 0 0 0 0 s s % C7.2.171 LD4 (multiple structures)
+0 x 0 0 1 1 0 1 i 1 1 ... _ | 1 1 1 0 s s % C7.2.173 LD4R
+0 x 0 0 1 1 0 1 i 1 1 ... _ | x x 1 s s s % C7.2.172 LD4 (single structure)
+x x 1 0 1 1 0 0 0 1 _ ... _ | _ _ _ _ _ _ % C7.2.174 LDNP (SIMD&FP)
+x x 1 0 1 1 0 i i 1 _ ... _ | _ _ _ _ _ _ % C7.2.175 LDP (SIMD&FP)
+x x 1 1 1 1 0 0 x 1 0 ... _ | _ _ _ _ 0 1 % C7.2.176 LDR (immediate, SIMD&FP)
+x x 0 1 1 1 0 0 _ _ _ ... _ | _ _ _ _ _ _ % C7.2.177 LDR (literal, SIMD&FP)
+x x 1 1 1 1 0 0 x 1 1 ... _ | _ _ _ _ 1 0 % C7.2.178 LDR (register, SIMD&FP)
+x x 1 1 1 1 0 0 x 1 0 ... _ | _ _ _ _ 0 0 % C7.2.179 LDUR (SIMD&FP)
+0 x 1 0 1 1 1 1 s s i ... _ | 0 0 0 0 h 0 % C7.2.180 MLA (by element)
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 0 0 1 0 1 % C7.2.181 MLA (vector)
+0 x 1 0 1 1 1 1 s s i ... _ | 0 1 0 0 h 0 % C7.2.182 MLS (by element)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 0 1 0 1 % C7.2.183 MLS (vector)
+0 1 0 1 1 1 1 0 0 0 0 ... _ | 0 0 0 0 0 1 % C7.2.184 MOV (scalar) % C7.2.32 DUP (element)
+0 1 1 0 1 1 1 0 0 0 0 ... _ | 0 _ _ _ _ 1 % C7.2.185 MOV (element) % C7.2.160 INS (element)
+0 1 0 0 1 1 1 0 0 0 0 ... _ | 0 0 0 1 1 1 % C7.2.186 MOV (from general) % C7.2.161 INS (general)
+0 x 0 0 1 1 1 0 1 0 1 ... _ | 0 0 0 1 1 1 % C7.2.187 MOV (vector) % C7.2.198 ORR (vector, register) 
+0 x 0 0 1 1 1 0 0 0 0 ... 0 | 0 0 1 1 1 1 % C7.2.188 MOV (to general)
+0 x s 0 1 1 1 1 0 0 0 ... _ | _ _ _ _ 0 1 % C7.2.189 MOVI
+0 x 0 0 1 1 1 1 s s i ... _ | 1 0 0 0 h 0 % C7.2.190 MUL (by element)
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 0 0 1 1 1 % C7.2.191 MUL (vector)
+0 x 1 0 1 1 1 0 0 0 1 ... 0 | 0 1 0 0 1 1 % C7.2.192 MVN % C7.2.195 NOT 
+0 x 1 0 1 1 1 1 0 0 0 ... _ | _ _ _ _ 0 1 % C7.2.193 MVNI
+0 x 1 0 1 1 1 0 s s 1 ... 0 | 1 0 1 1 1 1 % C7.2.194 NEG (vector)
+0 x 0 0 1 1 1 0 1 1 1 ... _ | 0 0 0 1 1 1 % C7.2.196 ORN (vector)
+0 x 0 0 1 1 1 1 0 0 0 ... _ | _ _ _ 1 0 1 % C7.2.197 ORR (vector, immediate)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 0 1 1 1 % C7.2.199 PMUL
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 1 1 0 0 0 % C7.2.200 PMULL, PMULL2
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 0 0 0 0 % C7.2.201 RADDHN, RADDHN2
+1 1 0 0 1 1 1 0 0 1 1 ... _ | 1 0 0 0 1 1 % C7.2.202 RAX1
+0 x 1 0 1 1 1 0 0 1 1 ... 0 | 0 1 0 1 1 0 % C7.2.203 RBIT (vector)
+0 x 0 0 1 1 1 0 s s 1 ... 0 | 0 0 0 1 1 0 % C7.2.204 REV16 (vector)
+0 x 1 0 1 1 1 0 s s 1 ... 0 | 0 0 0 0 1 0 % C7.2.205 REV32 (vector)
+0 x 0 0 1 1 1 0 s s 1 ... 0 | 0 0 0 0 1 0 % C7.2.206 REV64
+0 x 0 0 1 1 1 1 0 _ _ ... _ | 1 0 0 0 1 1 % C7.2.207 RSHRN, RSHRN2
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 1 0 0 0 % C7.2.208 RSUBHN, RSUBHN2
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 1 1 1 1 1 % C7.2.209 SABA
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 1 0 1 0 0 % C7.2.210 SABAL, SABAL2
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 1 1 1 0 1 % C7.2.211 SABD
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 1 1 1 0 0 % C7.2.212 SABDL, SABDL2
+0 x 0 0 1 1 1 0 s s 1 ... 0 | 0 1 1 0 1 0 % C7.2.213 SADALP
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 0 0 0 0 0 % C7.2.214 SADDL, SADDL2
+0 x 0 0 1 1 1 0 s s 1 ... 0 | 0 0 1 0 1 0 % C7.2.215 SADDLP
+0 x 0 0 1 1 1 0 s s 1 ... 0 | 0 0 1 1 1 0 % C7.2.216 SADDLV
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 0 0 1 0 0 % C7.2.217 SADDW, SADDW2
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 1 1 1 0 0 1 % C7.2.218 SCVTF (vector, fixed-point)
+0 x 0 i 1 1 1 0 0 i 1 ... 1 | 1 1 0 1 1 0 % C7.2.219 SCVTF (vector, integer)
+x 0 0 1 1 1 1 0 s s 0 ... 0 | _ _ _ _ _ _ % C7.2.220 SCVTF (scalar, fixed-point)
+x 0 0 1 1 1 1 0 s s 1 ... 0 | 0 0 0 0 0 0 % C7.2.221 SCVTF (scalar, integer)
+0 x 0 0 1 1 1 1 s s i ... _ | 1 1 1 0 h 0 % C7.2.222 SDOT (by element)
+0 x 0 0 1 1 1 0 s s 0 ... _ | 1 0 0 1 0 1 % C7.2.223 SDOT (vector)
+0 1 0 1 1 1 1 0 0 0 0 ... _ | 0 0 0 0 0 0 % C7.2.224 SHA1C
+0 1 0 1 1 1 1 0 0 0 1 ... 0 | 0 0 0 0 1 0 % C7.2.225 SHA1H
+0 1 0 1 1 1 1 0 0 0 0 ... _ | 0 0 1 0 0 0 % C7.2.226 SHA1M
+0 1 0 1 1 1 1 0 0 0 0 ... _ | 0 0 0 1 0 0 % C7.2.227 SHA1P
+0 1 0 1 1 1 1 0 0 0 0 ... _ | 0 0 1 1 0 0 % C7.2.228 SHA1SU0
+0 1 0 1 1 1 1 0 0 0 1 ... 0 | 0 0 0 1 1 0 % C7.2.229 SHA1SU1
+0 1 0 1 1 1 1 0 0 0 0 ... _ | 0 1 0 1 0 0 % C7.2.230 SHA256H2
+0 1 0 1 1 1 1 0 0 0 0 ... _ | 0 1 0 0 0 0 % C7.2.231 SHA256H
+0 1 0 1 1 1 1 0 0 0 1 ... 0 | 0 0 1 0 1 0 % C7.2.232 SHA256SU0
+0 1 0 1 1 1 1 0 0 0 0 ... _ | 0 1 1 0 0 0 % C7.2.233 SHA256SU1
+1 1 0 0 1 1 1 0 0 1 1 ... _ | 1 0 0 0 0 0 % C7.2.234 SHA512H
+1 1 0 0 1 1 1 0 0 1 1 ... _ | 1 0 0 0 0 1 % C7.2.235 SHA512H2
+1 1 0 0 1 1 1 0 1 1 0 ... 0 | 1 0 0 0 0 0 % C7.2.236 SHA512SU0
+1 1 0 0 1 1 1 0 0 1 1 ... _ | 1 0 0 0 1 0 % C7.2.237 SHA512SU1
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 0 0 0 0 1 % C7.2.238 SHADD
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 0 1 0 1 0 1 % C7.2.239 SHL
+0 x 1 0 1 1 1 0 s s 1 ... 1 | 0 0 1 1 1 0 % C7.2.240 SHLL, SHLL2
+0 x 0 0 1 1 1 1 0 _ _ ... _ | 1 0 0 0 0 1 % C7.2.241 SHRN, SHRN2
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 0 1 0 0 1 % C7.2.242 SHSUB
+0 x 1 i 1 1 1 1 0 _ _ ... _ | 0 1 0 1 0 1 % C7.2.243 SLI
+1 1 0 0 1 1 1 0 0 1 1 ... _ | 1 1 0 0 0 0 % C7.2.244 SM3PARTW1
+1 1 0 0 1 1 1 0 0 1 1 ... _ | 1 1 0 0 0 1 % C7.2.245 SM3PARTW2
+1 1 0 0 1 1 1 0 0 1 0 ... _ | 0 _ _ _ _ _ % C7.2.246 SM3SS1
+1 1 0 0 1 1 1 0 0 1 0 ... _ | 1 0 i i 0 0 % C7.2.247 SM3TT1A
+1 1 0 0 1 1 1 0 0 1 0 ... _ | 1 0 i i 0 1 % C7.2.248 SM3TT1B
+1 1 0 0 1 1 1 0 0 1 0 ... _ | 1 0 i i 1 0 % C7.2.249 SM3TT2A
+1 1 0 0 1 1 1 0 0 1 0 ... _ | 1 0 i i 1 1 % C7.2.250 SM3TT2B
+1 1 0 0 1 1 1 0 1 1 0 ... 0 | 1 0 0 0 0 1 % C7.2.251 SM4E
+1 1 0 0 1 1 1 0 0 1 1 ... _ | 1 1 0 0 1 0 % C7.2.252 SM4EKEY
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 1 1 0 0 1 % C7.2.253 SMAX
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 0 1 0 0 1 % C7.2.254 SMAXP
+0 x 0 0 1 1 1 0 s s 1 ... 0 | 1 0 1 0 1 0 % C7.2.255 SMAXV
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 1 1 0 1 1 % C7.2.256 SMIN
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 0 1 0 1 1 % C7.2.257 SMINP
+0 x 0 0 1 1 1 0 s s 1 ... 1 | 1 0 1 0 1 0 % C7.2.258 SMINV
+0 x 0 0 1 1 1 1 s s i ... _ | 0 0 1 0 h 0 % C7.2.259 SMLAL, SMLAL2 (by element)
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 0 0 0 0 0 % C7.2.260 SMLAL, SMLAL2 (vector)
+0 x 0 0 1 1 1 1 s s i ... _ | 0 1 1 0 h 0 % C7.2.261 SMLSL, SMLSL2 (by element)
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 0 1 0 0 0 % C7.2.262 SMLSL, SMLSL2 (vector)
+0 x 0 0 1 1 1 0 0 0 0 ... _ | 0 0 1 0 1 1 % C7.2.263 SMOV
+0 x 0 0 1 1 1 1 s s i ... _ | 1 0 1 0 h 0 % C7.2.264 SMULL, SMULL2 (by element)
+0 x 0 0 1 1 1 0 s s 1 ... _ | 1 1 0 0 0 0 % C7.2.265 SMULL, SMULL2 (vector)
+0 x 0 i 1 1 1 0 s s 1 ... 0 | 0 1 1 1 1 0 % C7.2.266 SQABS
+0 x 0 i 1 1 1 0 s s 1 ... _ | 0 0 0 0 1 1 % C7.2.267 SQADD
+0 x 0 i 1 1 1 1 s s i ... _ | 0 0 1 1 h 0 % C7.2.268 SQDMLAL, SQDMLAL2 (by element)
+0 x 0 i 1 1 1 0 s s 1 ... _ | 1 0 0 1 0 0 % C7.2.269 SQDMLAL, SQDMLAL2 (vector)
+0 x 0 i 1 1 1 1 s s i ... _ | 0 1 1 1 h 0 % C7.2.270 SQDMLSL, SQDMLSL2 (by element)
+0 x 0 i 1 1 1 0 s s 1 ... _ | 1 0 1 1 0 0 % C7.2.271 SQDMLSL, SQDMLSL2 (vector)
+0 x 0 i 1 1 1 1 s s i ... _ | 1 1 0 0 h 0 % C7.2.272 SQDMULH (by element)
+0 x 0 i 1 1 1 0 s s 1 ... _ | 1 0 1 1 0 1 % C7.2.273 SQDMULH (vector)
+0 x 0 0 1 1 1 1 s s i ... _ | 1 0 1 1 h 0 % C7.2.274 SQDMULL, SQDMULL2 (by element)
+0 x 0 i 1 1 1 0 s s 1 ... _ | 1 1 0 1 0 0 % C7.2.275 SQDMULL, SQDMULL2 (vector)
+0 x 1 i 1 1 1 0 s s 1 ... _ | 0 1 1 1 1 0 % C7.2.276 SQNEG
+0 x 1 i 1 1 1 1 s s i ... _ | 1 1 0 1 h 0 % C7.2.277 SQRDMLAH (by element)
+0 x 1 i 1 1 1 0 s s 0 ... _ | 1 0 0 0 0 1 % C7.2.278 SQRDMLAH (vector)
+0 x 1 i 1 1 1 1 s s i ... _ | 1 1 1 1 h 0 % C7.2.279 SQRDMLSH (by element)
+0 x 1 i 1 1 1 0 s s 0 ... _ | 1 0 0 0 1 1 % C7.2.280 SQRDMLSH (vector)
+0 x 0 i 1 1 1 1 s s i ... _ | 1 1 0 1 h 0 % C7.2.281 SQRDMULH (by element)
+0 x 1 i 1 1 1 0 s s 1 ... _ | 1 0 1 1 0 1 % C7.2.282 SQRDMULH (vector)
+0 x 0 i 1 1 1 0 s s 1 ... _ | 0 1 0 1 1 1 % C7.2.283 SQRSHL
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 1 0 0 1 1 1 % C7.2.284 SQRSHRN, SQRSHRN2
+0 x 1 i 1 1 1 1 0 _ _ ... _ | 1 0 0 0 1 1 % C7.2.285 SQRSHRUN, SQRSHRUN2
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 0 1 1 1 0 1 % C7.2.286 SQSHL (immediate)
+0 x 0 i 1 1 1 0 s s 1 ... _ | 0 1 0 0 1 1 % C7.2.287 SQSHL (register)
+0 x 1 0 1 1 1 1 0 _ _ ... _ | 0 1 1 0 0 1 % C7.2.288 SQSHLU
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 1 0 0 1 0 1 % C7.2.289 SQSHRN, SQSHRN2
+0 x 1 i 1 1 1 1 0 _ _ ... _ | 1 0 0 0 0 1 % C7.2.290 SQSHRUN, SQSHRUN2
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 0 1 0 1 1 % C7.2.291 SQSUB
+0 x 0 0 1 1 1 0 s s 1 ... 1 | 0 1 0 0 1 0 % C7.2.292 SQXTN, SQXTN2
+0 x 1 0 1 1 1 0 s s 1 ... 1 | 0 0 1 0 1 0 % C7.2.293 SQXTUN, SQXTUN2
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 0 0 1 0 1 % C7.2.294 SRHADD
+0 x 1 i 1 1 1 1 0 _ _ ... _ | 0 1 0 0 0 1 % C7.2.295 SRI
+0 x 0 i 1 1 1 0 s s 1 ... _ | 0 1 0 1 0 1 % C7.2.296 SRSHL
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 0 0 1 0 0 1 % C7.2.297 SRSHR
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 0 0 1 1 0 1 % C7.2.298 SRSRA
+0 x 0 i 1 1 1 0 s s 1 ... _ | 0 1 0 0 0 1 % C7.2.299 SSHL
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 0 0 0 0 0 1 % C7.2.301 SSHR
+0 x 0 i 1 1 1 1 0 _ _ ... _ | 0 0 0 1 0 1 % C7.2.302 SSRA
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 0 1 0 0 0 % C7.2.303 SSUBL, SSUBL2
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 0 1 1 0 0 % C7.2.304 SSUBW, SSUBW2
+0 x 0 0 1 1 0 0 i 0 0 ... _ | x x 1 x s s % C7.2.305 ST1 (multiple structures)
+0 x 0 0 1 1 0 1 i 0 0 ... _ | x x 0 s s s % C7.2.306 ST1 (single structure)
+0 x 0 0 1 1 0 0 i 0 0 ... _ | 1 0 0 0 s s % C7.2.307 ST2 (multiple structures)
+0 x 0 0 1 1 0 1 i 0 1 ... _ | x x 0 s s s % C7.2.308 ST2 (single structure)
+0 x 0 0 1 1 0 0 i 0 0 ... _ | 0 1 0 0 s s % C7.2.309 ST3 (multiple structures)
+0 x 0 0 1 1 0 1 i 0 0 ... _ | x x 1 s s s % C7.2.310 ST3 (single structure)
+0 x 0 0 1 1 0 0 x 0 0 ... _ | 0 0 0 0 s s % C7.2.311 ST4 (multiple structures)
+0 x 0 0 1 1 0 1 0 0 1 ... 0 | x x 1 s s s % C7.2.312 ST4 (single structure)
+s s 1 0 1 1 0 0 0 0 _ ... _ | _ _ _ _ _ _ % C7.2.313 STNP (SIMD&FP)
+s s 1 0 1 1 0 i i 0 _ ... _ | _ _ _ _ _ _ % C7.2.314 STP (SIMD&FP)
+s s 1 1 1 1 0 0 x 0 0 ... _ | _ _ _ _ i 1 % C7.2.317 STUR (SIMD&FP)
+s s 1 1 1 1 0 0 x 0 1 ... _ | _ _ _ _ 1 0 % C7.2.316 STR (register, SIMD&FP)
+s s 1 1 1 1 0 0 x 0 0 ... _ | _ _ _ _ 0 0 % C7.2.317 STUR (SIMD&FP)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 0 0 0 1 % C7.2.318 SUB (vector)
+0 x 0 0 1 1 1 0 s s 1 ... _ | 0 1 1 0 0 0 % C7.2.319 SUBHN, SUBHN2
+0 x 0 0 1 1 1 0 s s 1 ... 0 | 0 0 1 1 1 0 % C7.2.320 SUQADD
+0 x 0 0 1 1 1 1 0 _ _ ... 0 | 1 0 1 0 0 1 % C7.2.321 SXTL, SXTL2 % C7.2.300 SSHLL, SSHLL2
+0 x 0 0 1 1 1 0 0 0 0 ... _ | 0 i i 0 0 0 % C7.2.322 TBL
+0 x 0 0 1 1 1 0 0 0 0 ... _ | 0 i i 1 0 0 % C7.2.323 TBX
+0 x 0 0 1 1 1 0 s s 0 ... _ | 0 0 1 0 1 0 % C7.2.324 TRN1
+0 x 0 0 1 1 1 0 s s 0 ... _ | 0 1 1 0 1 0 % C7.2.325 TRN2
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 1 1 1 1 % C7.2.326 UABA
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 0 1 0 0 % C7.2.327 UABAL, UABAL2
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 1 1 0 1 % C7.2.328 UABD
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 1 1 0 0 % C7.2.329 UABDL, UABDL2
+0 x 1 0 1 1 1 0 s s 1 ... 0 | 0 1 1 0 1 0 % C7.2.330 UADALP
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 0 0 0 0 % C7.2.331 UADDL, UADDL2
+0 x 1 0 1 1 1 0 s s 1 ... 0 | 0 0 1 1 0 1 % C7.2.332 UADDLP
+0 x 1 0 1 1 1 0 s s 1 ... 0 | 0 0 1 1 1 0 % C7.2.333 UADDLV
+0 x 1 0 1 1 1 1 0 _ _ ... _ | 1 1 1 0 0 1 % C7.2.335 UCVTF (vector, fixed-point)
+0 x 1 1 1 1 1 0 0 s 1 ... 1 | 1 1 0 1 1 0 % C7.2.336 UCVTF (vector, integer)
+x 0 0 1 1 1 1 0 s s 0 ... 1 | _ _ _ _ _ _ % C7.2.337 UCVTF (scalar, fixed-point)
+x 0 0 1 1 1 1 0 s s 1 ... 1 | 0 0 0 0 0 0 % C7.2.338 UCVTF (scalar, integer)
+0 x 1 0 1 1 1 1 s s i ... _ | 1 1 1 0 h 0 % C7.2.339 UDOT (by element)
+0 x 1 0 1 1 1 0 s s 0 ... _ | 1 0 0 1 0 1 % C7.2.340 UDOT (vector)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 0 0 0 1 % C7.2.341 UHADD
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 1 0 0 1 % C7.2.342 UHSUB
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 1 0 0 1 % C7.2.343 UMAX
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 1 0 0 1 % C7.2.344 UMAXP
+0 x 1 0 1 1 1 0 s s 1 ... 0 | 1 0 1 0 1 0 % C7.2.345 UMAXV
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 1 0 1 1 % C7.2.346 UMIN
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 1 0 1 1 % C7.2.347 UMINP
+0 x 1 0 1 1 1 0 s s 1 ... 1 | 1 0 1 0 1 0 % C7.2.348 UMINV
+0 x 1 0 1 1 1 1 s s i ... _ | 0 0 1 0 h 0 % C7.2.349 UMLAL, UMLAL2 (by element)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 0 0 0 0 % C7.2.350 UMLAL, UMLAL2 (vector)
+0 x 1 0 1 1 1 1 s s i ... _ | 0 1 1 0 h 0 % C7.2.351 UMLSL, UMLSL2 (by element)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 0 1 0 0 0 % C7.2.352 UMLSL, UMLSL2 (vector)
+0 x 0 0 1 1 1 0 0 0 0 ... _ | 0 0 1 1 1 1 % C7.2.353 UMOV
+0 x 1 0 1 1 1 1 s s i ... _ | 1 0 1 0 h 0 % C7.2.354 UMULL, UMULL2 (by element)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 1 1 0 0 0 0 % C7.2.355 UMULL, UMULL2 (vector)
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 0 0 1 1 % C7.2.356 UQADD
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 1 0 1 1 1 % C7.2.357 UQRSHL
+0 x 1 0 1 1 1 1 0 _ _ ... _ | 1 0 0 1 1 1 % C7.2.358 UQRSHRN, UQRSHRN2
+0 x 1 i 1 1 1 1 0 _ _ ... _ | 0 1 1 1 0 1 % C7.2.359 UQSHL (immediate)
+0 x 1 i 1 1 1 0 s s 1 ... _ | 0 1 0 0 1 1 % C7.2.360 UQSHL (register)
+0 x 1 0 1 1 1 1 0 _ _ ... _ | 1 0 0 1 0 1 % C7.2.361 UQSHRN, UQSHRN2
 0 x 1 i 1 1 1 0 s s 1 ... _ | 0 0 1 0 1 1 % C7.2.362 UQSUB - Unsigned saturating Subtract.
 0 x 1 i 1 1 1 0 s s 1 ... 1 | 0 1 0 0 1 0 % C7.2.363 UQXTN, UQXTN2 - Unsigned saturating extract Narrow.
 0 x 0 0 1 1 1 0 1 s 1 ... 1 | 1 1 0 0 1 0 % C7.2.364 URECPE - Unsigned Reciprocal Estimate.
@@ -29,13 +250,13 @@
 0 x 1 i 1 1 1 0 s s 1 ... _ | 0 1 0 1 0 1 % C7.2.366 URSHL - Unsigned Rounding Shift Left (register).
 0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 1 0 0 1 % C7.2.367 URSHR - Unsigned Rounding Shift Right (immediate).
 0 x 1 0 1 1 1 0 1 s 1 ... 1 | 1 1 0 0 1 0 % C7.2.368 URSQRTE - Unsigned Reciprocal Square Root Estimate.
-0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 1 1 0 1 % C7.2.369 URSRA - Unsigned Rounding Shift Right and Accumulate (immediate).
+0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 1 1 0 1 % C7.2.369 URSRA
 0 1 1 1 1 1 1 0 s s 1 ... _ | 0 1 0 0 0 1 % C7.2.370 USHL - Unsigned Shift Left (register).
-0 x 1 0 1 1 1 1 0 _ _ ... 0 | 1 0 1 0 0 1 % C7.2.371 USHLL, USHLL2 % C7.2.377 UXTL, UXTL2 - Unsigned extend Long.
+0 x 1 0 1 1 1 1 0 _ _ ... 0 | 1 0 1 0 0 1 % C7.2.371 USHLL, USHLL2 % C7.2.377 UXTL, UXTL2
 0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 0 0 0 1 % C7.2.372 USHR - Unsigned Shift Right (immediate).
-0 x 1 s 1 1 1 0 s s 1 ... 0 | 0 0 0 1 1 1 % C7.2.373 USQADD - Unsigned saturating Accumulate of Signed value.
-0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 0 1 0 1 % C7.2.374 USRA - Unsigned Shift Right and Accumulate (immediate).
-0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 1 0 0 0 % C7.2.375 USUBL, USUBL2 - Unsigned Subtract Long.
+0 x 1 s 1 1 1 0 s s 1 ... 0 | 0 0 0 1 1 1 % C7.2.373 USQADD
+0 1 1 1 1 1 1 1 0 _ _ ... _ | 0 0 0 1 0 1 % C7.2.374 USRA
+0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 1 0 0 0 % C7.2.375 USUBL, USUBL2
 0 x 1 0 1 1 1 0 s s 1 ... _ | 0 0 1 1 0 0 % C7.2.376 USUBW, USUBW2 - Unsigned Subtract Wide.
 0 x 0 0 1 1 1 0 s s 0 ... _ | 0 0 0 1 1 0 % C7.2.378 UZP1 - Unzip vectors (primary).
 0 x 0 0 1 1 1 0 s s 0 ... _ | 0 1 0 1 1 0 % C7.2.379 UZP2 - Unzip vectors (secondary).
